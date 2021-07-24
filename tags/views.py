@@ -4,7 +4,7 @@ from django.views import View
 
 from tags.models import Tag
 from tags.forms import TagForm
-from posts.utils import ObjectCreateMixin, ObjectUpdateMixin
+from posts.utils import ObjectCreateMixin, ObjectUpdateMixin, ObjectDeleteMixin
 
 def tags_list_view(request):
     tags = Tag.objects.all()
@@ -31,11 +31,7 @@ class TagUpdateView(View, ObjectUpdateMixin):
 
 class TagDeleteView(View):
 
-    def get(self, request, id):
-        post = get_object_or_404(Tag, id=id)
-        return render(request, 'tags/tag_delete.html', context={'post': post})
+    template = 'tags/tag_delete.html'
+    obj_class = Tag
+    url = 'tags_list_url'
 
-    def post(self, request, id):
-        post = get_object_or_404(Tag, id=id)
-        post.delete()
-        return redirect(reverse('tags_list_url'))

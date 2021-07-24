@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect, reverse
 from posts.models import Post
 from posts.forms import PostForm, SearchForm
 from comments.forms import CommentForm
-from posts.utils import ObjectCreateMixin, ObjectUpdateMixin
+from posts.utils import ObjectCreateMixin, ObjectUpdateMixin, ObjectDeleteMixin
 
 def posts_list_view(request):
     if request.method == "GET":
@@ -53,13 +53,8 @@ class PostUpdateView(View, ObjectUpdateMixin):
     bound_form = PostForm
     
 
-class PostDeleteView(View):
+class PostDeleteView(View, ObjectDeleteMixin):
 
-    def get(self, request, id):
-        post = get_object_or_404(Post, id=id)
-        return render(request, 'posts/post_delete.html', context={'post':post})
-
-    def post(self, request, id):
-        post = get_object_or_404(Post, id=id)
-        post.delete()
-        return redirect(reverse('posts_list_url'))
+    template = 'posts/post_delete.html'
+    obj_class = Post
+    url = 'posts_list_url'
