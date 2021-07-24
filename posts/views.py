@@ -3,6 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect, reverse
 from posts.models import Post
 from posts.forms import PostForm, SearchForm
 from comments.forms import CommentForm
+from posts.utils import ObjectCreateMixin, ObjectUpdateMixin
 
 def posts_list_view(request):
     if request.method == "GET":
@@ -39,35 +40,18 @@ def post_detail_view(request, id):
                 'comments': comments,
                 'comment_form': comment_form})
 
-class PostCreateView(View):
+class PostCreateView(View, ObjectCreateMixin):
 
-    def get(self, request):
-        form = PostForm()
-        return render(request, 'posts/post_create.html', context={'form': form})
-
-    def post(self, request):
-        form = PostForm(request.POST)
-        if form.is_valid():
-            post = form.save()
-            return redirect(post)
-        return render(request, 'posts/post_create.html', context={'form': form})
+     form = PostForm
+     template = 'posts/post_create.html'   
 
 
-class PostUpdateView(View):
+class PostUpdateView(View, ObjectUpdateMixin):
 
-    def get(self, request, id):
-        post = get_object_or_404(Post, id=id)
-        bound_form = PostForm(instance=post)
-        return render(request, 'posts/post_update.html', context={'form': bound_form, 'post':post})   
-
-    def post(self, request, id):
-        post = get_object_or_404(Post, id=id)
-        form = PostForm(request.POST, instance=post)
-        if form.is_valid():
-            post = form.save()
-            return redirect(post)
-        return render(request, 'posts/post_update.html', context={'form': form, 'post': post})
-
+    obj_class = Post
+    template = 'posts/post_update.html'
+    bound_form = PostForm
+    
 
 class PostDeleteView(View):
 
