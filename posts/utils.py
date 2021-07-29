@@ -45,7 +45,7 @@ class ObjectDeleteMixin:
         obj = get_object_or_404(self.obj_class, id=id)
         return render(request, self.template, context={self.obj_class.__name__.lower(): obj})
 
-    def post(self, request, id):
+    def post(self, id):
         obj = get_object_or_404(self.obj_class, id=id)
         obj.delete()
         return redirect(reverse(self.url))

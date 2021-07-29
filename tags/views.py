@@ -8,7 +8,7 @@ from posts.utils import ObjectCreateMixin, ObjectUpdateMixin, ObjectDeleteMixin
 
 def tags_list_view(request):
     tags = Tag.objects.all()
-    return render(request, 'tags/tags_list.html', context={'tags': tags})
+    return render(request, 'tags/tag_list.html', context={'tags': tags})
 
 
 def tag_detail_view(request, id):
@@ -26,7 +26,7 @@ class TagUpdateView(View, ObjectUpdateMixin):
 
     obj_class = Tag
     template = 'tags/tag_update.html'
-    form = TagForm
+    bound_form = TagForm
     
 
 class TagDeleteView(View):
