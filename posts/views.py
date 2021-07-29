@@ -13,7 +13,7 @@ def posts_list_view(request):
         search_form = SearchForm(request.POST)
         if search_form.is_valid():
             search_param = search_form.cleaned_data.get('search_param')
-            filtered_posts = Post.objects.filter(title_icontains=search_param)
+            filtered_posts = Post.objects.filter(title__icontains=search_param)
             return render(request, 'posts/index.html', context={'posts': filtered_posts})
 
 
