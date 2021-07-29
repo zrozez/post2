@@ -2,10 +2,11 @@ from django.contrib.auth.models import User
 from accounts.forms import CreateLoginForm, LoginForm
 from django.shortcuts import redirect, render, reverse
 from django.views import View
-from django.contrib.auth import authenticate, get_user_model, login
+from django.contrib.auth import authenticate, get_user_model, login, logout
 
 from accounts.forms import LoginForm
 
+User = get_user_model()
 
 class LoginView(View):
 
@@ -35,22 +36,28 @@ class LoginView(View):
 
 class CreateUserView(View):
 
+    def get(self, request):
+        registration_form = CreateLoginForm()
+        return render(request, 'accounts/register.html', context={'registration_form':registration_form})
+
     def post(self, request):
         
         bound_form = CreateLoginForm(request.POST)
-        User = get_user_model()
+        
         if bound_form.is_valid():
             username = bound_form.cleaned_data.get('username')
             password = bound_form.cleaned_data.get('password')
-            User.objects.create_user(username=username, password=password)
-            user = authenticate(username=username, password=password)
 
-            if user:
-                login(request, user)
-                return redirect(reverse('posts_list_url'))
-        
-        return render(request, 'accounts/register.html', context={'bound_form':bound_form})
-
-
+        if not User.objects.filter(username=username).exists():
+            user = User.objects.create_user(username=username, password=password)
             
+            login(request, user)
+            return redirect(reverse('posts_list_url'))
+        
+        return render(request, 'accounts/register.html', context={'registration_form':bound_form})
+
+
+def logout_view(request):
+    logout(request)
+    return redirect(reverse('posts_list_url'))     
 
