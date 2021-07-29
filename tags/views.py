@@ -29,7 +29,7 @@ class TagUpdateView(View, ObjectUpdateMixin):
     bound_form = TagForm
     
 
-class TagDeleteView(View):
+class TagDeleteView(View, ObjectDeleteMixin):
 
     template = 'tags/tag_delete.html'
     obj_class = Tag
