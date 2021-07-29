@@ -1,11 +1,13 @@
 from django.db import models
-from django.forms.fields import CharField
-from django.forms.widgets import TextInput
+from django.contrib.auth.models import AbstractUser
 
 
-# class User(models.Model):
-#     username = CharField(max_length=24)
-#     password = CharField(max_length=50)
-#     first_name = TextInput()
-#     last_name = TextInput()
+class User(AbstractUser):
+
+    class UserType(models.TextChoices):
+        ADMIN = 'admin'
+        EDITOR = 'editor'
+        ORDINARY = 'ordinary'
+
+    role = models.CharField(max_length=10, choices=UserType.choices, default=UserType.ORDINARY)
 
