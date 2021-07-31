@@ -16,7 +16,8 @@
     <form action="." method="POST">
         {{ login_form.as_p }}
         {% csrf_token %}
-        <button type="submit">Okey</button>
+        <button type="submit" class="btn btn-success">Okey</button>
+        <a href="{% url 'register_url' %}" class="btn btn-primary">Регистрация</a>
     </form>
 </body>
 </html>
