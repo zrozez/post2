@@ -4,7 +4,7 @@
 {% endblock %}
 
 {% block content %}
-{% if posts.count == 0 %}
+  {% if posts.count == 0 %}
   <a href="{% url 'post_create_url' %}" class="btn btn-success"> Создать пост </a>
   {% endif %}
 {% for post in page.object_list %}
